@@ -1,10 +1,10 @@
 from django.urls import path
-from . import views
+from .views import ServiceListView, ServiceDetailView, ServiceCommentsView, CommentReplyView
 
 app_name = 'service'
 urlpatterns = [
-    path('', views.PageList.as_view(), name='lists'),
-    path('endless', views.EndlessScroll.as_view(), name='infinity'),
-    path('reply', views.replyPost, name='replies'),
-    path('<slug:slug>', views.Details.as_view(), name='datas'),
+    path('services/', ServiceListView.as_view(), name='service-list'),
+    path('services/<slug:slug>/', ServiceDetailView.as_view(), name='service-detail'),
+    path('services/<int:service_id>/comments/', ServiceCommentsView.as_view(), name='service-comments'),
+    path('comments/<int:comment_id>/reply/', CommentReplyView.as_view(), name='comment-reply'),
 ]

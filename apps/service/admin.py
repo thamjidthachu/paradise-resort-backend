@@ -1,20 +1,20 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import Services, Images, Comments
+from .models import Service, File, Comment
 
 
 # Register your models here.
 class ImagesList(admin.ModelAdmin):
-    model = Images
+    model = File
 
 
 class ImagesInline(admin.StackedInline):
-    model = Images
+    model = File
     extra = 0
 
 
 class CommentsInline(admin.TabularInline):
-    model = Comments
+    model = Comment
     can_delete = False
     readonly_fields = ('author', 'message', 'comment_time')
     verbose_name_plural = 'Comments'
@@ -41,6 +41,6 @@ class ServiceAdmin(admin.ModelAdmin):
     readonly_fields = ('create_time',)
 
 
-admin.site.register(Services, ServiceAdmin)
-admin.site.register(Comments, CommentAdmin)
-admin.site.register(Images, ImagesList)
+admin.site.register(Service, ServiceAdmin)
+admin.site.register(Comment, CommentAdmin)
+admin.site.register(File, ImagesList)
