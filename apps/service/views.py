@@ -102,7 +102,7 @@ def replyPost(request):
         comment_time=timestamp
     )
 
-    test = get_object_or_404(Services, id=request.POST['service'])
+    test = get_object_or_404(Service, id=request.POST['service'])
     slugify = test.slug
     subject = 'Resort Business'
     message = f'Hi {users}, {auth} replied on your Comment "{commenter}" as "{reply}"'

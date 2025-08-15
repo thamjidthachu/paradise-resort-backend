@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # packages
     'rest_framework',
     'ckeditor',
+    'corsheaders',
 
     # apps
     'apps.authentication',
@@ -51,6 +52,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -148,5 +150,13 @@ EMAIL_HOST_PASSWORD = config('EMAIL_PASSWORD')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 AUTH_USER_MODEL = 'authentication.User'
+
+# CORS settings
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+]
+
+# If you want to allow credentials (cookies, HTTP authentication) to be included in cross-site HTTP requests
+CORS_ALLOW_CREDENTIALS = True
+

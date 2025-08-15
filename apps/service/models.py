@@ -11,8 +11,8 @@ from apps.authentication.models import User
 
 class Service(models.Model):
     name = models.CharField(max_length=40)
-    image = models.ImageField(upload_to="service_images", max_length=256)
     slug = models.SlugField(unique=True, default=name)
+    synopsis = models.TextField(null=True)
     description = RichTextField(null=True)
     create_time = DateTimeField(blank=True, auto_now_add=True)
     service_comment = GenericRelation('comment')
