@@ -48,14 +48,14 @@ class User(AbstractBaseUser, PermissionsMixin):
         ('F', 'Female'),
         ('M', 'Male'),
     )
+    username = models.CharField(max_length=50)
     full_name = models.CharField(max_length=150)
-    userName = models.CharField(max_length=50)
     email = models.EmailField(db_index=True, unique=True)
     Phone = models.CharField(max_length=50)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-    signature = models.ImageField(blank=True, null=True)
+    avatar = models.FileField(blank=True, null=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['full_name', 'gender']

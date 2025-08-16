@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.contenttypes.admin import GenericTabularInline
 from .models import Service, File, Comment
 
 
@@ -13,16 +13,19 @@ class ImagesInline(admin.StackedInline):
     extra = 0
 
 
-class CommentsInline(admin.TabularInline):
+class CommentsInline(GenericTabularInline):
     model = Comment
     can_delete = False
-    readonly_fields = ('author', 'message', 'comment_time')
     verbose_name_plural = 'Comments'
+    extra = 1
 
     def has_add_permission(self, request, obj=None):
-        return False
+        return True
 
     def has_delete_permission(self, request, obj=None):
+        return False
+
+    def has_change_permission(self, request, obj=None):
         return False
 
 
@@ -35,7 +38,7 @@ class ServiceAdmin(admin.ModelAdmin):
     fieldsets = [
         (None, {'fields': ['name', 'synopsis', 'description']})
     ]
-    inlines = [ImagesInline,]
+    inlines = [ImagesInline, CommentsInline]
     list_display = ('name', 'create_time',)
     readonly_fields = ('create_time',)
 

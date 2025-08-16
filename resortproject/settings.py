@@ -156,7 +156,28 @@ AUTH_USER_MODEL = 'authentication.User'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
 ]
-
-# If you want to allow credentials (cookies, HTTP authentication) to be included in cross-site HTTP requests
 CORS_ALLOW_CREDENTIALS = True
+
+# Required for CSRF with CORS
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",
+]
+
+# For development only - in production, use proper domain
+CORS_ORIGIN_ALLOW_ALL = True
+CSRF_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_HTTPONLY = False
+SESSION_COOKIE_HTTPONLY = True
+
+# If you're using token-based authentication, you might need this
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ]
+}
 

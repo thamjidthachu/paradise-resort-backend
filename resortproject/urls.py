@@ -21,8 +21,7 @@ from django.views.generic.base import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('home/', include('apps.authentication.urls')),
+    path('authentication/', include("django.contrib.auth.urls")),  # Django's built-in auth
+    path('api/auth/', include('apps.authentication.urls')),  # API authentication endpoints
     path('services/', include('apps.service.urls')),
-    path('authentication/', include("django.contrib.auth.urls")),
-    path('', TemplateView.as_view(template_name='authentication/home.html'), name='home'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

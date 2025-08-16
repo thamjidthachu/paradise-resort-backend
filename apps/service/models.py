@@ -14,7 +14,15 @@ class Service(models.Model):
     slug = models.SlugField(unique=True, default=name)
     synopsis = models.TextField(null=True)
     description = RichTextField(null=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    unit = models.CharField(max_length=256)
+    time = models.IntegerField()
+    max_people = models.IntegerField()
+    min_people = models.IntegerField()
+    location = models.CharField(max_length=256)
+    policy = RichTextField(null=True)
     create_time = DateTimeField(blank=True, auto_now_add=True)
+
     service_comment = GenericRelation('comment')
 
     def __str__(self):
@@ -23,6 +31,9 @@ class Service(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         super(Service, self).save(*args, **kwargs)
+
+    def get_review(self):
+        return self.service_comment.all()
 
 
 class File(models.Model):
@@ -35,12 +46,14 @@ class File(models.Model):
 
 class Comment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
+    rating = models.PositiveSmallIntegerField(default=0)
     message = models.CharField(max_length=256)
+
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField(blank=True)
     content_object = GenericForeignKey('content_type', 'object_id')
-    comment_time = DateTimeField(auto_now_add=True, blank=True)
-    comment = GenericRelation('comment')
+
+    comment_time = models.DateTimeField(auto_now_add=True, blank=True)
 
     def __str__(self):
         return self.message
