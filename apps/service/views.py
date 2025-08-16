@@ -4,7 +4,7 @@ from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from rest_framework import status, generics, permissions
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.pagination import PageNumberPagination
@@ -45,16 +45,15 @@ class CustomPagination(PageNumberPagination):
 class ServiceReviewsView(generics.ListCreateAPIView):
     serializer_class = CommentsSerializer
     pagination_class = CustomPagination
-    authentication_classes = []  # Disable session authentication for this view
-    permission_classes = [permissions.AllowAny]  # Or set appropriate permissions
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         service = get_object_or_404(Service, slug=self.kwargs['service_slug'])
         return service.service_comment.all().order_by('-comment_time')
 
-    def create(self, request, *args, **kwargs):
-        # This bypasses CSRF for API requests
-        return super().create(request, *args, **kwargs)
+    # def create(self, request, *args, **kwargs):
+    #     # This bypasses CSRF for API requests
+    #     return super().create(request, *args, **kwargs)
 
     def perform_create(self, serializer):
         service = get_object_or_404(Service, slug=self.kwargs['service_slug'])

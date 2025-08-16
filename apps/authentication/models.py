@@ -53,9 +53,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(db_index=True, unique=True)
     Phone = models.CharField(max_length=50)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
+    avatar = models.FileField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-    avatar = models.FileField(blank=True, null=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['full_name', 'gender']
