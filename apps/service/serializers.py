@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import File, Service, Comment
+from .models import File, Service, Comment, Advertisement
 from ..authentication.serializers import UserSerializer
 
 
@@ -56,7 +56,6 @@ class ServicesSerializer(serializers.ModelSerializer):
     def get_reviews(obj):
         comments = obj.service_comment.all()
         return CommentsSerializer(comments, many=True).data if comments.exists() else None
-        return None
 
 
 class CommentsSerializer(serializers.ModelSerializer):
@@ -64,3 +63,9 @@ class CommentsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = ['author', 'message', 'rating', 'comment_time']
+
+
+class AdvertiseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Advertisement
+        fields = ['title', 'file', 'link']

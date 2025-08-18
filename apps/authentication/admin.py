@@ -44,13 +44,13 @@ class CustomUserAdmin(UserAdmin):
 
     fieldsets = (
         (None, {'fields': (
-            'email', "username", "gender", 'Phone', 'full_name',)}),
+            'avatar','email', "username", "gender", 'phone', 'full_name',)}),
         ('Permissions', {'fields': ('is_active', 'groups', 'user_permissions')}),
     )
     add_fieldsets = (
         ('User Info', {
             'classes': ('wide',),
-            'fields': ('full_name', 'email', 'password', 'username', "gender", 'Phone',)}
+            'fields': ('full_name', 'email', 'password', 'username', "gender", 'phone',)}
          ),
         ('Signature', {
             'classes': ('wide',),

@@ -1,12 +1,9 @@
 from django.contrib import admin
 from django.contrib.contenttypes.admin import GenericTabularInline
-from .models import Service, File, Comment
+from .models import Service, File, Comment, Advertisement
 
 
 # Register your models here.
-class ImagesList(admin.ModelAdmin):
-    model = File
-
 
 class ImagesInline(admin.StackedInline):
     model = File
@@ -29,20 +26,11 @@ class CommentsInline(GenericTabularInline):
         return False
 
 
-class CommentAdmin(admin.ModelAdmin):
-    list_display = ('message', 'author', 'object_id', 'content_type')
-    list_filter = ['content_type', 'author']
-
-
 class ServiceAdmin(admin.ModelAdmin):
-    fieldsets = [
-        (None, {'fields': ['name', 'synopsis', 'description']})
-    ]
     inlines = [ImagesInline, CommentsInline]
     list_display = ('name', 'create_time',)
     readonly_fields = ('create_time',)
 
 
 admin.site.register(Service, ServiceAdmin)
-admin.site.register(Comment, CommentAdmin)
-admin.site.register(File, ImagesList)
+admin.site.register(Advertisement)

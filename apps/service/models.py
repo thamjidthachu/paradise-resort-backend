@@ -8,6 +8,15 @@ from django.contrib.contenttypes.models import ContentType
 
 from apps.authentication.models import User
 
+class Advertisement(models.Model):
+    title = models.CharField(max_length=256)
+    file = models.FileField(upload_to="service_advertisement", max_length=256, null=True, blank=True)
+    link = models.URLField(null=True, blank=True)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.title
+
 
 class Service(models.Model):
     name = models.CharField(max_length=40)

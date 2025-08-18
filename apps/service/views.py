@@ -10,8 +10,9 @@ from rest_framework.views import APIView
 from rest_framework.pagination import PageNumberPagination
 
 from resortproject import settings
-from .models import Service, Comment
-from .serializers import ServicesSerializer, CommentsSerializer, ServiceListSerializer
+from .models import Service, Comment, Advertisement
+from .serializers import ServicesSerializer, CommentsSerializer, ServiceListSerializer, AdvertiseSerializer
+
 
 class HomeView(APIView):
     permission_classes = [AllowAny]
@@ -55,11 +56,9 @@ class ServiceReviewsView(generics.ListCreateAPIView):
         return super().create(request, *args, **kwargs)
 
     def perform_create(self, serializer):
-        print("service_slug", self.kwargs['service_slug'])
         service = get_object_or_404(Service, slug=self.kwargs['service_slug'])
         user = self.request.user
-        print(user)
-        
+
         serializer.save(
             content_object=service,
             author=user,
@@ -96,3 +95,10 @@ class ReviewReplyView(APIView):
         recipient_list = [email]
         send_mail(subject, message, email_from, recipient_list)
         return Response({'detail': 'Reply posted.'}, status=status.HTTP_201_CREATED)
+
+
+class AdvertiseView(generics.ListAPIView):
+    queryset = Advertisement.objects.filter(is_active=True).order_by('-id')[:5]
+    serializer_class = AdvertiseSerializer
+    permission_classes = [permissions.AllowAny]
+    pagination_class = None
