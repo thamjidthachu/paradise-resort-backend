@@ -12,7 +12,7 @@ class UserSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = User
-        fields = ['id', 'username', 'full_name', 'email', 'is_active', 'avatar']
+        fields = ['id',  'avatar', 'username', 'full_name', 'email', 'phone', 'gender', 'is_active',]
         read_only_fields = ['id', 'is_active']
     
     def get_avatar(self, obj):
@@ -30,13 +30,19 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password', 'password2', 'full_name')
+        fields = ('avatar','username', 'email', 'phone', 'password', 'password2', 'full_name')
         extra_kwargs = {
             'full_name': {'required': True},
             'email': {'required': True}
         }
 
     def validate(self, attrs):
+        if User.objects.filter(email=attrs['email']).exists():
+            raise serializers.ValidationError({"email": "Email is already in use."})
+
+        if User.objects.filter(username=attrs['username']).exists():
+            raise serializers.ValidationError({"username": "Username is already in use."})
+
         if attrs['password'] != attrs['password2']:
             raise serializers.ValidationError({"password": "Password fields didn't match."})
         return attrs
@@ -47,9 +53,11 @@ class RegisterSerializer(serializers.ModelSerializer):
         
         # Create user
         user = User.objects.create_user(
+            avatar=validated_data.get('avatar'),
             username=validated_data['username'],
             email=validated_data['email'],
-            full_name=validated_data.get('full_name', ''),
+            phone=validated_data['phone'],
+            full_name=validated_data.get('full_name'),
             password=validated_data['password']
         )
         
@@ -57,8 +65,9 @@ class RegisterSerializer(serializers.ModelSerializer):
         self.send_welcome_email(user, validated_data['password'])
         
         return user
-    
-    def send_welcome_email(self, user, password):
+
+    @staticmethod
+    def send_welcome_email(user, password):
         subject = 'Welcome to Our Resort'
         message = f"""
         Thank you for registering with us!
@@ -73,14 +82,8 @@ class RegisterSerializer(serializers.ModelSerializer):
         Best regards,
         The Resort Team
         """
-        
-        send_mail(
-            subject=subject,
-            message=message,
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[user.email],
-            fail_silently=False,
-        )
+
+        send_mail(subject=subject, message=message, from_email=settings.DEFAULT_FROM_EMAIL, recipient_list=[user.email])
 
 
 class LoginSerializer(serializers.Serializer):

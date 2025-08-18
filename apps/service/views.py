@@ -51,20 +51,18 @@ class ServiceReviewsView(generics.ListCreateAPIView):
         service = get_object_or_404(Service, slug=self.kwargs['service_slug'])
         return service.service_comment.all().order_by('-comment_time')
 
-    # def create(self, request, *args, **kwargs):
-    #     # This bypasses CSRF for API requests
-    #     return super().create(request, *args, **kwargs)
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
 
     def perform_create(self, serializer):
+        print("service_slug", self.kwargs['service_slug'])
         service = get_object_or_404(Service, slug=self.kwargs['service_slug'])
-        # For unauthenticated users, you might want to handle this differently
-        user = None
-        if self.request.user.is_authenticated:
-            user = self.request.user
+        user = self.request.user
+        print(user)
         
         serializer.save(
             content_object=service,
-            author=user,  # This will be None if user is not authenticated
+            author=user,
             content_type=ContentType.objects.get_for_model(Service),
             object_id=service.id
         )

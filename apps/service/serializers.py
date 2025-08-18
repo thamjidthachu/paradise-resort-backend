@@ -60,7 +60,7 @@ class ServicesSerializer(serializers.ModelSerializer):
 
 
 class CommentsSerializer(serializers.ModelSerializer):
-    author = UserSerializer()
+    author = UserSerializer(read_only=True)
     class Meta:
         model = Comment
         fields = ['author', 'message', 'rating', 'comment_time']
