@@ -25,7 +25,7 @@ services:
       retries: 3
 
   postgres:
-    container_name: the_dayabase
+    container_name: the_database
     image: postgres:15
     environment:
       POSTGRES_DB: ${DB_NAME}
