@@ -9,11 +9,11 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1'
-          memory: 2048M
+          cpus: '.05'
+          memory: 256M
         reservations:
-          cpus: '0.75'
-          memory: 2048M
+          cpus: '0.05'
+          memory: 256M
     depends_on:
       postgres:
         condition: service_healthy
