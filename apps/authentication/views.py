@@ -11,6 +11,12 @@ from .serializers import UserSerializer, RegisterSerializer
 User = get_user_model()
 
 
+class HealthCheckView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, format=None):
+        return Response({'status': 'ok'}, status=status.HTTP_200_OK)
+
 class RegisterView(generics.CreateAPIView):
     permission_classes = [AllowAny]
     serializer_class = RegisterSerializer
