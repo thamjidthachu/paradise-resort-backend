@@ -79,6 +79,9 @@ celerybeat.pid
 resort_business_env/
 venv/
 ENV/
+media/
+
+service_images
 
 
 # mkdocs documentation
@@ -100,6 +103,9 @@ pip-selfcheck.json
 # Android studio 3.1+ serialized cache file
 .idea
 .vscode/
+*/__pycache__/*
+*/.pytest_cache
+*.pyc.*
 
 main.py
 

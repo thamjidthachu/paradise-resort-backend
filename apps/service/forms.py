@@ -1,5 +1,5 @@
 from django import forms
-from .models import Comments
+from .models import Comment
 
 
 class CommentsForm(forms.ModelForm):
@@ -7,7 +7,7 @@ class CommentsForm(forms.ModelForm):
     object_id = forms.IntegerField(widget=forms.HiddenInput, initial=123)
 
     class Meta:
-        model = Comments
+        model = Comment
         fields = ('message',)
         error_messages = {
             'message': {
