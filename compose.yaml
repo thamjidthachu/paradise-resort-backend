@@ -1,6 +1,6 @@
 services:
   backend:
-    container_name: the_sarene_escape_backend
+    container_name: the_backend
     build: .
     env_file:
       - .env
@@ -25,7 +25,7 @@ services:
       retries: 3
 
   postgres:
-    container_name: the_sarene_escape_db
+    container_name: the_dayabase
     image: postgres:15
     environment:
       POSTGRES_DB: ${DB_NAME}

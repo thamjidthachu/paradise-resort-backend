@@ -80,6 +80,7 @@ resort_business_env/
 venv/
 ENV/
 media/
+static/
 
 service_images
 
