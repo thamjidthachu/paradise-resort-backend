@@ -27,10 +27,18 @@ sys.exit(0)
 END
 }
 
-# Wait for PostgreSQL to be ready
+# Wait for PostgreSQL to be ready with a timeout
+TIMEOUT=300  # 5 minutes timeout
+ELAPSED=0
 until postgres_ready; do
-  echo "PostgreSQL is unavailable - sleeping"
-  sleep 1
+    echo "PostgreSQL is unavailable - sleeping"
+    sleep 5
+    ELAPSED=$((ELAPSED + 5))
+    
+    if [ "$ELAPSED" -ge "$TIMEOUT" ]; then
+        echo "Timeout reached waiting for PostgreSQL"
+        exit 1
+    fi
 done
 
 echo "PostgreSQL is up - executing command"
@@ -42,4 +50,4 @@ python manage.py migrate --noinput
 python manage.py collectstatic --noinput
 
 # Start server
-python manage.py runserver 0.0.0.0:8000
+python manage.py runserver "0.0.0.0:${PORT:-8000}"
