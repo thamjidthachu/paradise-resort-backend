@@ -62,7 +62,7 @@ class CommentsSerializer(serializers.ModelSerializer):
     author = UserSerializer(read_only=True)
     class Meta:
         model = Comment
-        fields = ['author', 'message', 'rating', 'comment_time']
+        fields = ['author', 'message', 'rating', 'created_at']
 
 
 class AdvertiseSerializer(serializers.ModelSerializer):

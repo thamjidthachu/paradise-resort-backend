@@ -50,7 +50,7 @@ class ServiceReviewsView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         service = get_object_or_404(Service, slug=self.kwargs['service_slug'])
-        return service.service_comment.all().order_by('-comment_time')
+        return service.service_comment.all().order_by('-created_at')
 
     def create(self, request, *args, **kwargs):
         return super().create(request, *args, **kwargs)
@@ -77,13 +77,11 @@ class ReviewReplyView(APIView):
         if not reply_text:
             return Response({'detail': 'Reply text required.'}, status=status.HTTP_400_BAD_REQUEST)
         author = get_object_or_404(User, user_id=request.user.id)
-        timestamp = timezone.now()
         reply = Comment.objects.create(
             content_type=ContentType.objects.get_for_model(Comment),
             object_id=parent_comment.id,
             message=reply_text,
             author=author,
-            comment_time=timestamp
         )
         # Email notification
         users = parent_comment.author

@@ -7,18 +7,19 @@ from django.utils.text import slugify
 from django.contrib.contenttypes.models import ContentType
 
 from apps.authentication.models import User
+from apps.utils import ActiveModel, TimeStampedModel
 
-class Advertisement(models.Model):
+
+class Advertisement(TimeStampedModel, ActiveModel):
     title = models.CharField(max_length=256)
     file = models.FileField(upload_to="service_advertisement", max_length=256, null=True, blank=True)
     link = models.URLField(null=True, blank=True)
-    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.title
 
 
-class Service(models.Model):
+class Service(TimeStampedModel, ActiveModel):
     name = models.CharField(max_length=40)
     slug = models.SlugField(unique=True, default=name)
     synopsis = models.TextField(null=True)
@@ -53,7 +54,7 @@ class File(models.Model):
         return f'{str(self.service)} - {str(self.images)}'
 
 
-class Comment(models.Model):
+class Comment(TimeStampedModel, ActiveModel):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     rating = models.PositiveSmallIntegerField(default=0)
     message = models.CharField(max_length=256)
@@ -61,8 +62,6 @@ class Comment(models.Model):
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField(blank=True)
     content_object = GenericForeignKey('content_type', 'object_id')
-
-    comment_time = models.DateTimeField(auto_now_add=True, blank=True)
 
     def __str__(self):
         return self.message
