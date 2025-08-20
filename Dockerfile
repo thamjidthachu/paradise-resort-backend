@@ -3,37 +3,27 @@ FROM python:3.12.3-slim
 
 WORKDIR /app
 
-# Install system dependencies including build tools
+# Install only essential system dependencies
 RUN apt-get update && apt-get install -y \
-    vim \
     curl \
     gcc \
-    g++ \
-    make \
-    libffi-dev \
-    flex \
-    bison \
-    libtool \
-    pkg-config \
-    git \
-    netcat-openbsd \
     && rm -rf /var/lib/apt/lists/*
 
+# Copy requirements first to leverage Docker cache
 COPY requirements.txt .
 
 RUN pip install --no-cache-dir --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Copy project files
 COPY . .
 
+# Make entrypoint script executable
+RUN chmod +x /app/entrypoint.sh
+
+# Create non-root user
 RUN useradd -m appuser && chown -R appuser:appuser /app
 USER appuser
 
-# Copy entrypoint script
-COPY entrypoint.sh /app/
-
 # Set entrypoint
 ENTRYPOINT ["/app/entrypoint.sh"]
-
-# Command to run the application
-CMD ["python", "manage.py", "runserver"]
