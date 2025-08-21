@@ -36,6 +36,9 @@ class UserManager(BaseUserManager):
         """
         if email is None:
             raise TypeError('Users must have an email address.')
+
+        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_staff', True)
         return self._create_user(email, password, **extra_fields)
 
 
